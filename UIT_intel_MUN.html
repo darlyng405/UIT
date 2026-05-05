@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UIT — Intel MUN | Argentina</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#090d12;--s1:#111620;--s2:#181d27;--s3:#1f2535;
+  --b1:rgba(255,255,255,0.06);--b2:rgba(255,255,255,0.11);--b3:rgba(255,255,255,0.18);
+  --t1:#dde4f0;--t2:#8695b0;--t3:#4a566e;--t4:#2a3345;
+  --acc:#3dffc0;--red:#ff4b3a;--blue:#4a90f5;--yellow:#f5c030;--orange:#f07830;
+  --prog:#2de88a;--prog-bg:rgba(45,232,138,.09);
+  --mod:#4a90f5;--mod-bg:rgba(74,144,245,.09);
+  --cau:#f5c030;--cau-bg:rgba(245,192,48,.09);
+  --res:#ff4b3a;--res-bg:rgba(255,75,58,.09);
+}
+body{background:var(--bg);color:var(--t1);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;overflow-x:hidden}
+
+/* ── HEADER ── */
+.hdr{padding:44px 28px 32px;border-bottom:1px solid var(--b1);background:linear-gradient(160deg,rgba(61,255,192,.04) 0%,transparent 60%);position:relative}
+.hdr::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--acc) 40%,transparent 100%)}
+.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.hdr-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,7vw,72px);letter-spacing:.04em;line-height:1;margin-bottom:6px}
+.hdr-sub{font-size:13px;color:var(--t2);font-weight:300;max-width:580px;line-height:1.65;margin-bottom:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:'DM Mono',monospace;font-size:10px;color:var(--t3);border:1px solid var(--b2);border-radius:4px;padding:4px 10px;letter-spacing:.04em}
+.chip b{color:var(--acc)}
+
+/* ── CONTROLS ── */
+.ctrl{padding:14px 28px;border-bottom:1px solid var(--b1);display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--s1);position:sticky;top:0;z-index:50;backdrop-filter:blur(8px)}
+.srch{flex:1;min-width:180px;position:relative}
+.srch-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--t4);font-size:14px;pointer-events:none}
+.srch input{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:8px 10px 8px 32px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;transition:border-color .2s}
+.srch input:focus{border-color:var(--acc)}
+.srch input::placeholder{color:var(--t4)}
+.fbtn{background:var(--s2);border:1px solid var(--b1);border-radius:5px;padding:7px 12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--t3);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fbtn:hover{border-color:var(--b2);color:var(--t2)}
+.fbtn.on{background:rgba(61,255,192,.1);border-color:var(--acc);color:var(--acc)}
+.fbtn.p.on{background:var(--prog-bg);border-color:var(--prog);color:var(--prog)}
+.fbtn.m.on{background:var(--mod-bg);border-color:var(--mod);color:var(--mod)}
+.fbtn.c.on{background:var(--cau-bg);border-color:var(--cau);color:var(--cau)}
+.fbtn.r.on{background:var(--res-bg);border-color:var(--res);color:var(--res)}
+.fgrp{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ── STATS ── */
+.stats{padding:12px 28px;border-bottom:1px solid var(--b1);display:flex;gap:20px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--t3)}
+.stats span{color:var(--t1)}
+.st-p span{color:var(--prog)}
+.st-m span{color:var(--mod)}
+.st-c span{color:var(--cau)}
+.st-r span{color:var(--res)}
+
+/* ── GRID ── */
+.wrap{padding:22px 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:14px}
+.grid.list{grid-template-columns:1fr}
+
+/* ── CARD ── */
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:10px;overflow:hidden;transition:border-color .18s}
+.card:hover{border-color:var(--b2)}
+.card.me{border-color:rgba(61,255,192,.25);background:linear-gradient(135deg,rgba(61,255,192,.04) 0%,var(--s1) 50%)}
+
+.ctop{padding:16px 18px 12px}
+.chdr{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:11px}
+.cleft{display:flex;align-items:center;gap:11px}
+.flag{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
+.cname{font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--t1);margin-bottom:2px}
+.cmeta{font-family:'DM Mono',monospace;font-size:10px;color:var(--t4);letter-spacing:.04em}
+.badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:3px 9px;border-radius:4px;flex-shrink:0;margin-top:1px}
+.sum{font-size:13px;color:var(--t2);line-height:1.6;font-weight:300}
+.me-tag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(61,255,192,.3);border-radius:3px;padding:2px 7px;margin-bottom:8px}
+
+/* ── DETAIL EXPAND ── */
+.cdetail{display:none;border-top:1px solid var(--b1)}
+.cdetail.open{display:block}
+.tabs{display:flex;background:var(--s2);border-bottom:1px solid var(--b1)}
+.tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:9px 4px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--t4);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--t2)}
+.tab.on{color:var(--t1);border-bottom-color:var(--acc)}
+.tab.atk.on{color:var(--red);border-bottom-color:var(--red)}
+.pane{display:none;padding:14px 18px}
+.pane.on{display:block}
+
+.lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:5px;margin-top:12px}
+.lbl:first-child{margin-top:0}
+.txt{font-size:13px;color:var(--t2);line-height:1.65;font-weight:300}
+.ilist{list-style:none}
+.ilist li{font-size:13px;color:var(--t2);padding:3px 0 3px 14px;position:relative;line-height:1.55;font-weight:300}
+.ilist li::before{content:'▸';position:absolute;left:0;color:var(--acc);font-size:9px;top:5px}
+
+/* SOURCES */
+.src-list{list-style:none}
+.src-list li{margin-bottom:7px}
+.src-list a{font-family:'DM Mono',monospace;font-size:10px;color:var(--blue);text-decoration:none;letter-spacing:.02em;line-height:1.6;display:block;word-break:break-all}
+.src-list a:hover{text-decoration:underline}
+.src-inst{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* ATTACK */
+.atk-banner{background:rgba(255,75,58,.06);border:1px solid rgba(255,75,58,.14);border-radius:6px;padding:9px 13px;font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,75,58,.75);letter-spacing:.03em;margin-bottom:13px}
+.wk{margin-bottom:11px;padding-bottom:11px;border-bottom:1px solid var(--b1)}
+.wk:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.wktag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.wkbody{font-size:13px;color:var(--t2);line-height:1.6;font-weight:300}
+.counter{font-size:13px;color:rgba(61,255,192,.8);line-height:1.6;font-weight:300;font-style:italic;margin-top:6px;padding-left:10px;border-left:2px solid rgba(61,255,192,.25)}
+
+/* FOOTER TOGGLE */
+.cftr{padding:9px 18px;border-top:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center}
+.tbtn{background:none;border:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);cursor:pointer;display:flex;align-items:center;gap:5px;transition:opacity .15s}
+.tbtn:hover{opacity:.7}
+.tbtn .arr{transition:transform .2s;display:inline-block}
+.tbtn.open .arr{transform:rotate(180deg)}
+
+/* ALLIANCE */
+.alliances{margin:0 28px 28px;background:var(--s1);border:1px solid var(--b1);border-radius:10px;padding:18px 22px}
+.albl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);margin-bottom:14px}
+.algroups{display:flex;gap:10px;flex-wrap:wrap}
+.alg{flex:1;min-width:190px;background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:11px 13px}
+.algname{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px}
+.algmem{font-size:12px;color:var(--t2);line-height:1.7;font-weight:300}
+
+/* NO RESULTS */
+.nores{grid-column:1/-1;text-align:center;padding:60px;color:var(--t4);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em}
+
+@media(max-width:600px){
+  .hdr,.ctrl,.stats,.wrap,.alliances{padding-left:14px;padding-right:14px}
+  .grid{grid-template-columns:1fr}
+  .algroups{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="eyebrow">// INTELIGENCIA MUN · USO EXCLUSIVO DELEGADA ARGENTINA</div>
+  <h1 class="hdr-title">UIT · DERECHOS DIGITALES</h1>
+  <p class="hdr-sub">Cooperación internacional frente a la vulneración de derechos digitales en niños y adolescentes — Posiciones, legislación oficial verificada, intereses y vectores de ataque y defensa.</p>
+  <div class="chips">
+    <div class="chip">Comisión: <b>UIT</b></div>
+    <div class="chip">Países: <b>24</b></div>
+    <div class="chip">Tu delegación: <b>Argentina · Moderada</b></div>
+    <div class="chip">Aliados naturales: <b>Brasil · Canadá · España · R. Unido · Corea del Sur</b></div>
+  </div>
+</div>
+
+<div class="ctrl">
+  <div class="srch"><span class="srch-ico">⌕</span><input id="si" type="text" placeholder="Buscar país, ley, delegado…"/></div>
+  <div class="fgrp" id="rgn">
+    <button class="fbtn on" data-r="all">Todos</button>
+    <button class="fbtn" data-r="americas">Américas</button>
+    <button class="fbtn" data-r="europe">Europa</button>
+    <button class="fbtn" data-r="africa">África</button>
+    <button class="fbtn" data-r="asia">Asia-Pac</button>
+    <button class="fbtn" data-r="mideast">M. Oriente</button>
+  </div>
+  <div class="fgrp" id="stn">
+    <button class="fbtn p" data-s="progresista">● Progresista</button>
+    <button class="fbtn m" data-s="moderada">● Moderada</button>
+    <button class="fbtn c" data-s="cautelosa">● Cautelosa</button>
+    <button class="fbtn r" data-s="restrictiva">● Restrictiva</button>
+  </div>
+</div>
+
+<div class="stats" id="statsbar"></div>
+
+<div class="wrap"><div class="grid" id="grid"></div></div>
+
+<div class="alliances">
+  <div class="albl">// Mapa de alianzas — perspectiva Argentina</div>
+  <div class="algroups">
+    <div class="alg"><div class="algname" style="color:var(--prog)">Aliados naturales</div><div class="algmem">Brasil (ECA Digital), Canadá, España, Francia, Reino Unido, Corea del Sur, Australia, Nueva Zelanda</div></div>
+    <div class="alg"><div class="algname" style="color:var(--yellow)">Aliados tácticos</div><div class="algmem">México, Kenia, Sudáfrica, Japón, Alemania, Italia, Indonesia</div></div>
+    <div class="alg"><div class="algname" style="color:var(--orange)">Difíciles / Neutrales</div><div class="algmem">EE.UU. (intereses tech), India (soberanía de datos), Nigeria, Rep. Dominicana</div></div>
+    <div class="alg"><div class="algname" style="color:var(--red)">Adversarios</div><div class="algmem">China, Arabia Saudita, Turquía, Egipto — bloque pro-soberanía estatal / censura</div></div>
+  </div>
+</div>
+
+<script>
+const D=[
+  // ──────────────────── ARGENTINA (MI DELEGACIÓN) ────────────────────
+  {
+    code:"ARG",name:"Argentina",region:"americas",
+    delegado:"Darlyng R. Mateo Peral",comite:"MHU",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"AR",me:true,
+    sum:"TU DELEGACIÓN. Posición moderada: énfasis en cooperación regional MERCOSUR, educación digital y transparencia algorítmica. Sin ley específica de protección digital infantil aún.",
+    leg:"Ley 25.326 de Protección de Datos Personales (2000). Agencia de Acceso a la Información Pública (AAIP): Guía de Inteligencia Artificial para el Sector Público (2024). Propuesta de ley de contenido en línea en debate legislativo. Sin ley federal específica de protección de niñas/niños/adolescentes en entornos digitales.",
+    pos:"Apoya cooperación regional (MERCOSUR, CELAC). Cautelosa con regulaciones que restrinjan acceso a información. Énfasis en educación digital y alfabetización mediática como herramientas preventivas. Apoya transparencia algorítmica.",
+    int:["Marco regional sudamericano coordinado","Transparencia algorítmica para contenido infantil","Educación digital y alfabetización mediática","Protección frente a violencia de género en línea","Armonización con legislación latinoamericana"],
+    srcs:[
+      {txt:"Ley 25.326 — Infoleg, Ministerio de Justicia",url:"https://servicios.infoleg.gob.ar/infolegInternet/anexos/60000-64999/64790/texact.htm"},
+      {txt:"Guía IA Sector Público — AAIP (2024)",url:"https://www.argentina.gob.ar/sites/default/files/2024/07/guia_ia_sector_publico.pdf"},
+    ],
+    wks:[],contras:[]
+  },
+  // ──────────────────── ESTADOS UNIDOS ────────────────────
+  {
+    code:"USA",name:"Estados Unidos",region:"americas",
+    delegado:"Ashley Montero",comite:"CEE",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"US",me:false,
+    sum:"Enfoque fragmentado entre estados y gobierno federal. Protección histórica de industria tech, pero COPPA fue actualizada en 2025. Sin ley federal unificada de protección digital para menores.",
+    leg:"Children's Online Privacy Protection Act (COPPA, 1998). Enmiendas COPPA publicadas en Federal Register el 22 abr. 2025 (vigentes 23 jun. 2025, cumplimiento total 22 abr. 2026): requieren consentimiento parental opt-in para publicidad dirigida, prohíben retención indefinida de datos de menores. Kids Online Safety Act (KOSA): en debate en el Congreso, no aprobada. California Age-Appropriate Design Code (AADC, 2022): bloqueada judicialmente (NetChoice v. Bonta). Enmiendas FTC 16 CFR Part 312.",
+    pos:"Favorece autorregulación de plataformas. Apoya cooperación internacional pero rechaza marcos vinculantes que limiten empresas tecnológicas. Tensión interna entre 1ª Enmienda (libre expresión) y protección de menores. Prioriza estándares técnicos voluntarios sobre regulación dura.",
+    int:["Proteger modelo de negocio de grandes plataformas tech","Mantener liderazgo global en IA y datos","Apoyar estándares técnicos voluntarios sobre regulación coercitiva","Cooperación bilateral en ciberseguridad"],
+    srcs:[
+      {txt:"FTC — COPPA Final Rule Amendments (Federal Register, 22 abr. 2025)",url:"https://www.federalregister.gov/documents/2025/04/22/2025-05904/childrens-online-privacy-protection-rule"},
+      {txt:"FTC — Comunicado oficial COPPA 2025",url:"https://www.ftc.gov/news-events/news/press-releases/2025/01/ftc-finalizes-changes-childrens-privacy-rule-limiting-companies-ability-monetize-kids-data"},
+      {txt:"Texto de COPPA — 15 U.S.C. §6501",url:"https://www.ftc.gov/legal-library/browse/statutes/childrens-online-privacy-protection-act"},
+    ],
+    wks:[
+      {tag:"Sin ley federal unificada",body:"No existe una ley federal única de protección digital para menores. COPPA solo cubre menores de 13 años. KOSA lleva años en debate sin aprobarse. La fragmentación estado por estado crea vacíos regulatorios enormes.",ctr:"¿Cómo va a liderar estándares internacionales cuando no puede aprobar una ley federal en su propio Congreso?"},
+      {tag:"Captura regulatoria por Big Tech",body:"Meta, Google y TikTok tienen lobby masivo en Washington. EE.UU. ha debilitado o bloqueado regulaciones internacionales que afectan los ingresos publicitarios generados por datos de menores.",ctr:"La oposición de EE.UU. a marcos vinculantes internacionales no es un principio — es protección de mercado para Silicon Valley."},
+      {tag:"1ª Enmienda como escudo de plataformas",body:"Tribunales estadounidenses han bloqueado leyes de protección de menores (ej.: California AADC) invocando libre expresión. El sistema legal prioriza intereses comerciales sobre bienestar infantil.",ctr:"Si la autorregulación funcionara, Facebook no habría ocultado durante años sus propios estudios sobre el daño a adolescentes."},
+    ]
+  },
+  // ──────────────────── CANADÁ ────────────────────
+  {
+    code:"CAN",name:"Canadá",region:"americas",
+    delegado:"Jassiel Rafael Mateo De Los Santos",comite:"CEE",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"CA",me:false,
+    sum:"Líder regional. Proyecto de Ley C-63 (Online Harms Act 2024). Consulta con 1.500 menores en Quebec (2025). Aliado clave para Argentina.",
+    leg:"Proyecto de Ley C-63 — Online Harms Act (2024): en proceso legislativo, establece obligaciones a plataformas de eliminar contenido dañino, incluyendo material de abuso sexual de menores. Personal Information Protection and Electronic Documents Act (PIPEDA): aplica a datos de menores. Informe parlamentario Quebec 2025: consulta a 1.500 menores sobre bienestar digital.",
+    pos:"Apoya marcos internacionales vinculantes basados en el interés superior del niño. Impulsa participación activa de menores en gobernanza digital. Favorece obligaciones a plataformas sobre diseño adictivo. Cooperación multilateral OCDE y ONU.",
+    int:["Principio del interés superior del niño como eje de cualquier resolución UIT","Cooperación multilateral con OCDE y ONU","Estándares de diseño apropiado para la edad","Regulación de algoritmos y contenido nocivo","Participación infantil en políticas digitales"],
+    srcs:[
+      {txt:"Proyecto de Ley C-63 — Parlamento de Canadá",url:"https://www.parl.ca/legisinfo/en/bill/44-1/c-63"},
+      {txt:"PIPEDA — Oficina del Comisionado de Privacidad de Canadá",url:"https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/"},
+    ],
+    wks:[
+      {tag:"C-63 aún no es ley",body:"El proyecto de Ley C-63 lleva meses en debate parlamentario sin aprobarse. Canadá predica regulación internacional pero no ha completado su propio marco legislativo.",ctr:"¿Con qué credibilidad exige Canadá estándares vinculantes globales si no puede pasar su propia ley de protección en línea?"},
+      {tag:"Dependencia de plataformas estadounidenses",body:"La economía digital canadiense depende de Silicon Valley. Sus regulaciones deben negociarse siempre en el entorno del mercado tech norteamericano, limitando su independencia.",ctr:"Canadá no puede actuar de forma independiente de EE.UU. en materia regulatoria — su postura 'progresista' tiene un techo invisible."},
+    ]
+  },
+  // ──────────────────── BRASIL ────────────────────
+  {
+    code:"BRA",name:"Brasil",region:"americas",
+    delegado:"Yuly Loran",comite:"MHU",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"BR",me:false,
+    sum:"Referente global con ECA Digital (Ley 15.211/2025). Primera ley latinoamericana integral de protección de menores en entornos digitales. ALIADO PRIORITARIO.",
+    leg:"Ley 15.211/2025 — Estatuto Digital da Criança e do Adolescente (ECA Digital), sancionada 17 sep. 2025, publicada en Diário Oficial da União (Seção 1, Edição Extra, 17/09/2025): prohíbe diseño manipulador, perfilado conductual, análisis emocional de menores; multas hasta 10% del facturado del grupo económico. Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018). Decreto 12.622/2025: reglamentación parcial. Vigencia plena: 17 mar. 2026.",
+    pos:"Modelo a seguir. Impulsa estándares internacionales vinculantes alineados con ECA Digital. Exige responsabilidad directa de plataformas. Apoya ban de 'loot boxes' y publicidad dirigida a menores.",
+    int:["Exportar modelo ECA Digital como estándar internacional","Obligaciones proactivas a plataformas — diseño seguro por defecto","Prohibición de diseño adictivo y dark patterns","Cooperación sur-sur en enforcement","Marco específico de IA para menores"],
+    srcs:[
+      {txt:"Ley 15.211/2025 — Planalto (texto oficial)",url:"https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15211.htm"},
+      {txt:"Publicación original — Diário Oficial da União",url:"https://www.in.gov.br/en/web/dou/-/lei-n-15.211-de-17-de-setembro-de-2025-656579619"},
+      {txt:"Senado Federal — ECA Digital sancionado",url:"https://www12.senado.leg.br/noticias/materias/2025/09/18/adultizacao-lula-sanciona-estatuto-que-protege-crianca-e-adolescente-na-internet"},
+      {txt:"LGPD — Lei 13.709/2018 (Planalto)",url:"https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm"},
+    ],
+    wks:[
+      {tag:"Implementación reciente sin resultados medibles",body:"La Ley 15.211/2025 entró en plena vigencia el 17 mar. 2026 — no existen aún datos empíricos sobre su impacto real. Brasil propone su modelo como exitoso antes de la primera evaluación.",ctr:"ECA Digital lleva semanas en vigencia plena — ningún país debería adoptar un modelo cuya implementación aún no fue evaluada independientemente."},
+      {tag:"Brecha digital interna severa",body:"Millones de menores en Brasil no tienen acceso a internet básico. Proponer un modelo de protección digital avanzado sin haber resuelto el acceso universal es una contradicción interna.",ctr:"Si Brasil es el referente global, ¿cómo explica que sea uno de los países con mayor producción y tráfico de CSAM en América Latina según datos de la IWF?"},
+      {tag:"Enforcement históricamente débil",body:"Brasil tiene una tradición de leyes bien escritas con aplicación deficiente. La LGPD existe desde 2018 y la ANPD aún no ha multado a una gran plataforma extranjera de forma efectiva.",ctr:"Una ley sin enforcement es un documento — no un estándar exportable."},
+    ]
+  },
+  // ──────────────────── MÉXICO ────────────────────
+  {
+    code:"MEX",name:"México",region:"americas",
+    delegado:"Jazmín Abigail Duran C.",comite:"MHU",
+    stance:"cautelosa",label:"Cautelosa",
+    fc:"var(--cau)",fb:"var(--cau-bg)",ini:"MX",me:false,
+    sum:"Marco legal en desarrollo. Alta brecha digital y violencia en línea como prioridades. Aliado táctico en cooperación técnica.",
+    leg:"Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP, 2010): sin menciones específicas a menores en internet. Ley General de los Derechos de Niñas, Niños y Adolescentes (LGDNNA, 2014): no aborda entorno digital de forma explícita. Ley Olimpia (reformas al Código Penal Federal, 2021): violencia digital contra mujeres. Sin ley federal específica de protección de menores en internet.",
+    pos:"Apoya cooperación técnica para fortalecer capacidades nacionales. Prioriza acceso digital inclusivo junto con protección. Busca financiamiento internacional para infraestructura de seguridad digital.",
+    int:["Asistencia técnica de países desarrollados","Reducir brecha digital como condición previa a regulación agresiva","Combatir CSAM y grooming en plataformas","Protección frente a violencia de género digital"],
+    srcs:[
+      {txt:"LFPDPPP — DOF (Diario Oficial de la Federación)",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf"},
+      {txt:"LGDNNA — Cámara de Diputados",url:"https://www.diputados.gob.mx/LeyesBiblio/pdf/LGDNNA.pdf"},
+    ],
+    wks:[
+      {tag:"Sin ley de protección digital infantil",body:"No existe legislación específica para menores en internet en México. La LFPDPPP es general y no contempla entornos digitales actuales.",ctr:"Pedir asistencia técnica sin marco legislativo propio es admitir que no hay base institucional para cumplir compromisos internacionales."},
+      {tag:"Acceso vs. protección como pretexto",body:"Usar la brecha digital como excusa para no regular es una posición que beneficia directamente a las plataformas, dándoles tiempo indefinido para operar sin responsabilidad.",ctr:"Protección y acceso no son excluyentes — México puede legislar ahora y ampliar acceso al mismo tiempo."},
+    ]
+  },
+  // ──────────────────── REP. DOMINICANA ────────────────────
+  {
+    code:"DOM",name:"Rep. Dominicana",region:"americas",
+    delegado:"Darileidy Feliz",comite:"LCB",
+    stance:"cautelosa",label:"Cautelosa",
+    fc:"var(--cau)",fb:"var(--cau-bg)",ini:"RD",me:false,
+    sum:"País en desarrollo con marco legal emergente. Prioriza cooperación técnica internacional. Potencial aliado en bloque latinoamericano.",
+    leg:"Ley 172-13 de Protección de Datos Personales (2013): no contempla entornos digitales actuales ni específica para menores. Ley 136-03 Código para el Sistema de Protección y los Derechos Fundamentales de Niñas, Niños y Adolescentes: no aborda entorno digital. INDOTEL (Instituto Dominicano de las Telecomunicaciones) como regulador de telecomunicaciones.",
+    pos:"Apoya resoluciones internacionales sin compromisos financieros onerosos. Solicita asistencia técnica. Interés en mecanismos de denuncia accesibles para familias.",
+    int:["Acceso a fondos internacionales para capacidad digital","Mecanismos de denuncia adaptados al contexto caribeño","Cooperación con UIT para infraestructura","Protección de menores en zonas rurales y baja conectividad"],
+    srcs:[
+      {txt:"Ley 172-13 — Indotel/Congreso Nacional RD",url:"https://indotel.gob.do/media/6200/ley-172-13.pdf"},
+      {txt:"Ley 136-03 — Congreso Nacional RD",url:"https://www.oas.org/dil/esp/Codigo_para_el_Sistema_de_Proteccion_y_los_Derechos_Fundamentales_de_Ninos_Ninas_y_Adolescentes_Republica_Dominicana.pdf"},
+    ],
+    wks:[
+      {tag:"Marco legal totalmente desactualizado",body:"La Ley 172-13 es de 2013 y no contempla redes sociales ni plataformas actuales. No existe legislación de protección digital infantil.",ctr:"Rep. Dominicana apoya resoluciones sin compromisos — eso es reconocer que no tiene capacidad real de implementación nacional."},
+    ]
+  },
+  // ──────────────────── ESPAÑA ────────────────────
+  {
+    code:"ESP",name:"España",region:"europe",
+    delegado:"Oliannys Sussett Baez Feliz",comite:"MATRISA",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"ES",me:false,
+    sum:"Pionera en verificación de edad. Piloto europeo con Francia, Italia, Grecia y Dinamarca. Vínculo histórico con América Latina — aliado natural.",
+    leg:"Ley Orgánica de Protección de Datos y Garantía de Derechos Digitales (LOPDGDD, LO 3/2018): edad de consentimiento digital a 14 años. Digital Services Act (DSA, Reglamento UE 2022/2065): en vigor desde feb. 2024 para grandes plataformas. Guía de Verificación de Edad de Menores — AEPD (dic. 2023). Piloto 'Cartera Digital Beta': verificación de edad en colaboración con Francia, Italia, Grecia y Dinamarca. Investigación activa de la AEPD a Meta/Instagram.",
+    pos:"Apoya DSA como modelo exportable globalmente. Impulsa edad mínima digital de 15 en la UE. Exige diseño apropiado para la edad y prohibición de contenido nocivo por defecto.",
+    int:["DSA como referente internacional","Verificación de edad robusta y respetuosa de privacidad","Prohibición de algoritmos que amplíen daño a menores","Cooperación mediterránea y latinoamericana"],
+    srcs:[
+      {txt:"LOPDGDD (LO 3/2018) — BOE",url:"https://www.boe.es/buscar/act.php?id=BOE-A-2018-16673"},
+      {txt:"DSA — Reglamento (UE) 2022/2065 — EUR-Lex",url:"https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32022R2065"},
+      {txt:"Guía Verificación de Edad — AEPD (dic. 2023)",url:"https://www.aepd.es/guias/guia-verificacion-edad.pdf"},
+    ],
+    wks:[
+      {tag:"Piloto sin resultados publicados",body:"El piloto europeo de 'Cartera Digital' apenas inició — España promueve verificación de edad sin evidencia de que su propio sistema funcione a escala nacional.",ctr:"España exporta el DSA como modelo sin reconocer que fue diseñado para el mercado interno europeo, no para países en desarrollo sin infraestructura de identidad digital."},
+      {tag:"AEPD con enforcement lento",body:"La Agencia Española de Protección de Datos lleva años investigando plataformas sin resoluciones efectivas y rápidas. Las multas del GDPR a Meta han tardado años en resolverse.",ctr:"Si España no puede sancionar efectivamente a Meta dentro de su propio territorio, ¿cómo pretende que ese mismo modelo funcione globalmente?"},
+    ]
+  },
+  // ──────────────────── FRANCIA ────────────────────
+  {
+    code:"FRA",name:"Francia",region:"europe",
+    delegado:"Noel Fernandez Guzman",comite:"EMH",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"FR",me:false,
+    sum:"La más agresiva en regulación: ley de imagen de menores (2024), SREN, estándar ARCOM. Macron impulsa edad mínima 15 en toda la UE.",
+    leg:"Loi 2024-120 du 19 février 2024 — Derechos de imagen de menores: permite a menores retirar contenido publicado por sus padres. Loi SREN (2024 — Sécurisation et Régulation de l'Espace Numérique): verificación de edad para contenido adulto. Référentiel technique ARCOM (enero 2025): estándar técnico oficial de verificación de edad. DSA (UE) implementado. Propuesta de 'couvre-feu numérique' 22h–6h para menores: debate parlamentario, no aprobada.",
+    pos:"Líder en regulación dura. Exige verificación de edad técnicamente robusta. Apoya prohibición de redes sociales para menores de 15 sin consentimiento parental. Promueve responsabilidad penal a plataformas.",
+    int:["Exportar modelo regulatorio francés a nivel UE y ONU","Obligaciones específicas de verificación de edad técnica","Regulación de sharenting y protección de imagen","Responsabilidad de plataformas por daños a menores"],
+    srcs:[
+      {txt:"Loi 2024-120 — Légifrance (texto oficial)",url:"https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049107088"},
+      {txt:"Loi SREN (2024) — Légifrance",url:"https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049767616"},
+      {txt:"Référentiel ARCOM — verificación de edad (ene. 2025)",url:"https://www.arcom.fr/nos-ressources/espace-juridique/textes-applicables/referentiel-relatif-aux-systemes-de-verification-de-lage-pour-lacces-des-mineurs-aux-contenus-pornographiques"},
+    ],
+    wks:[
+      {tag:"Toque de queda digital nunca aprobado",body:"La propuesta de prohibir internet a menores entre 22h y 8h fue ampliamente criticada y nunca avanzó legislativamente. Francia propone medidas radicales que ni ella misma puede implementar.",ctr:"Francia propone prohibiciones impracticables para luego negociar desde una posición de máximos — eso no es política pública, es táctica de presión."},
+      {tag:"Verificación de edad vs. GDPR: contradicción interna",body:"ARCOM y la CNIL (regulador de privacidad) tienen tensión estructural: verificar edad de forma robusta requiere datos biométricos o de identidad que entran en conflicto con el GDPR.",ctr:"Si Francia no puede resolver la contradicción entre verificación de edad y privacidad en su propio ordenamiento, no puede imponer ese estándar a nivel global."},
+      {tag:"Censura disfrazada de protección",body:"Francia bloqueó TikTok en Nueva Caledonia durante las protestas de 2024. El concepto de 'protección digital' puede instrumentalizarse para silenciar disidencia política.",ctr:"Argentina debe señalar que cualquier marco que dé a los estados poderes de bloqueo discrecional es incompatible con libertad de expresión y derechos digitales reales."},
+    ]
+  },
+  // ──────────────────── ALEMANIA ────────────────────
+  {
+    code:"DEU",name:"Alemania",region:"europe",
+    delegado:"Lisanyi Thomas",comite:"MAMM",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"DE",me:false,
+    sum:"Tradición regulatoria fuerte. JMStV y Bundesdatenschutzgesetz. Equilibra protección con autodeterminación informacional. Aliado táctico.",
+    leg:"Jugendmedienschutz-Staatsvertrag (JMStV): tratado interestatal alemán de protección de menores en medios. Bundesdatenschutzgesetz (BDSG): ley federal de datos. DSA (UE) implementado con KJM (Comisión de Protección de Jóvenes en Medios). Guía conjunta de reguladores — 9 principios para sistemas de verificación de edad (oct. 2024). Ley de Telecomunicaciones (TKG 2021).",
+    pos:"Apoya marco europeo coordinado. Cautelosa con soluciones que generen nuevos riesgos de privacidad. Énfasis en derecho de autodeterminación informacional de menores.",
+    int:["Proteger privacidad de menores junto con su seguridad","Evitar que verificación de edad cree nuevas vulnerabilidades","Estándares técnicos IEEE/ISO por encima de regulación política","Educación digital en escuelas como eje preventivo"],
+    srcs:[
+      {txt:"JMStV — Texto completo (die-medienanstalten.de)",url:"https://www.die-medienanstalten.de/fileadmin/user_upload/Rechtsgrundlagen/Gesetze_Staatsvertraege/JMStV.pdf"},
+      {txt:"BDSG — Bundestag (texto oficial)",url:"https://www.gesetze-im-internet.de/bdsg_2018/"},
+      {txt:"DSA — EUR-Lex",url:"https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32022R2065"},
+    ],
+    wks:[
+      {tag:"Privacidad como parálisis regulatoria",body:"El énfasis alemán en autodeterminación informacional sirve históricamente como freno a soluciones concretas. Puede usarse para bloquear cualquier propuesta de verificación de edad efectiva.",ctr:"Alemania usa la privacidad como escudo — con ese estándar nunca se podrá implementar verificación de edad real y efectiva para proteger a menores."},
+      {tag:"Federalismo genera inconsistencias",body:"Alemania tiene 16 estados con competencias en educación y medios. El JMStV requiere negociación entre todos, creando burocracia e inconsistencias en la aplicación.",ctr:"Un país que no puede unificar su propia regulación entre 16 estados no debería proponer marcos de armonización internacional."},
+    ]
+  },
+  // ──────────────────── REINO UNIDO ────────────────────
+  {
+    code:"GBR",name:"Reino Unido",region:"europe",
+    delegado:"Anabel Celestino",comite:"MAMM",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"UK",me:false,
+    sum:"Online Safety Act 2023 referente mundial. Age Appropriate Design Code (Children's Code) pionero. Ofcom como regulador modelo. Gran aliado.",
+    leg:"Online Safety Act 2023 (c.50): 'duty of care' en plataformas regulado por Ofcom. Vigente ilegal content duties: 17 mar. 2025. Vigente children's safety duties (Códigos de Protección de Menores): 25 jul. 2025. Multas hasta £18M o 10% del ingreso mundial. Age Appropriate Design Code (Children's Code, ICO, 2020). Data Protection Act 2018 (UK-GDPR). Digital Undercover Arrangements Bill 2025: verificación digital de edad.",
+    pos:"Exporta modelo OSA globalmente. Impulsa 'duty of care' de plataformas hacia menores. Exige verificación de edad altamente efectiva. Apoya cooperación con Five Eyes y UE post-Brexit.",
+    int:["Duty of care como principio de derecho internacional","Verificación de edad técnicamente efectiva","Regulación de contenido nocivo legal pero dañino para menores","Cooperación internacional en enforcement"],
+    srcs:[
+      {txt:"Online Safety Act 2023 — legislation.gov.uk (texto oficial)",url:"https://www.legislation.gov.uk/ukpga/2023/50"},
+      {txt:"Online Safety Act — GOV.UK (Guía oficial)",url:"https://www.gov.uk/government/collections/online-safety-act"},
+      {txt:"Children's Safety Codes — Ofcom (25 jul. 2025)",url:"https://www.ofcom.org.uk/online-safety/protecting-children"},
+      {txt:"Age Appropriate Design Code — ICO",url:"https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/childrens-information/childrens-code-guidance-and-resources/age-appropriate-design-a-code-of-practice-for-online-services/"},
+    ],
+    wks:[
+      {tag:"Implementación caótica — crítica interna oficial",body:"Ian Russell, presidente de la Molly Russell Foundation, escribió al Primer Ministro en ene. 2025 calificando la implementación de Ofcom como un 'desastre'. Categorías de daño mal definidas, regulator con recursos insuficientes.",ctr:"El Children's Code fue pionero, pero Instagram y TikTok lo cumplieron superficialmente durante años sin consecuencias — buena ley, enforcement débil."},
+      {tag:"Verificación de edad = base de datos masiva de riesgo",body:"Los métodos de verificación de edad que propone el Reino Unido (biometría, ID digital) crean repositorios masivos de datos de usuarios que son un blanco para hackeos y abuso estatal.",ctr:"Pedir verificación biométrica de edad crea exactamente el tipo de base de datos que predadores, estados autoritarios y hackers buscan."},
+      {tag:"Post-Brexit aislamiento normativo",body:"UK está fuera del GDPR europeo y del DSA. Propone su modelo como exportable pero está cada vez más desvinculado del marco regulatorio del mercado más grande del mundo.",ctr:"Un modelo regulatorio que no dialoga con el GDPR ni el DSA europeos no puede ser el estándar global — es un modelo regional en declive de influencia."},
+    ]
+  },
+  // ──────────────────── ITALIA ────────────────────
+  {
+    code:"ITA",name:"Italia",region:"europe",
+    delegado:"Danna Odelisa Quiroz",comite:"RMCB",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"IT",me:false,
+    sum:"Activa en piloto UE de verificación de edad. AGCOM sanciona plataformas por DSA. Caso OpenAI/ChatGPT: primer regulador en actuar por datos de menores.",
+    leg:"GDPR (UE) implementado. DSA (Reglamento UE 2022/2065). AGCOM (Autorità per le Garanzie nelle Comunicazioni): regulador activo, ha multado plataformas por incumplimiento DSA en materia de menores. Caso OpenAI/ChatGPT: Garante della Privacy bloqueó ChatGPT en mar. 2023 por recopilación de datos sin base legal, incluyendo de menores; acceso restituido tras adopción de medidas. Piloto europeo de verificación de edad con España, Francia, Grecia y Dinamarca.",
+    pos:"Apoya marco europeo unificado. Activa en acciones regulatorias concretas. Equilibra protección con innovación digital.",
+    int:["Aplicación efectiva del DSA para protección de menores","Regulación de IA generativa y menores","Piloto funcional de verificación de edad","Cooperación mediterránea en enforcement"],
+    srcs:[
+      {txt:"DSA — EUR-Lex",url:"https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX%3A32022R2065"},
+      {txt:"Garante Privacy — Caso OpenAI/ChatGPT (2023)",url:"https://www.garanteprivacy.it/home/docweb/-/docweb-display/docweb/9870832"},
+    ],
+    wks:[
+      {tag:"ChatGPT: acción precipitada sin consistencia",body:"Italia bloqueó ChatGPT en 2023 y lo desbloqueó semanas después. Muestra que la acción regulatoria puede ser más táctica y mediática que estructural.",ctr:"La saga de ChatGPT demuestra que Italia actúa por impulso político, no por política pública sostenida — eso no genera confianza en un modelo regulatorio exportable."},
+    ]
+  },
+  // ──────────────────── NIGERIA ────────────────────
+  {
+    code:"NGA",name:"Nigeria",region:"africa",
+    delegado:"",comite:"",
+    stance:"cautelosa",label:"Cautelosa",
+    fc:"var(--cau)",fb:"var(--cau-bg)",ini:"NG",me:false,
+    sum:"Mayor economía africana. Nigeria Data Protection Act 2023. Impulsa Política de Seguridad Online Infantil de la Unión Africana.",
+    leg:"Nigeria Data Protection Act 2023: establece consentimiento parental para tratamiento de datos de menores; crea el Nigeria Data Protection Commission (NDPC). Cybercrimes (Prohibition, Prevention, etc.) Act 2015. Políticas de la Unión Africana sobre Child Online Safety (adoptadas feb. 2024). National Information Technology Development Agency (NITDA).",
+    pos:"Apoya política continental africana de protección infantil online. Solicita transferencia tecnológica. Cautela con regulaciones que generen costos para startups locales.",
+    int:["Implementar Política UA de Child Online Safety","Transferencia tecnológica y capacitación","Regulación adaptada al contexto africano","Protección contra tráfico y explotación sexual en línea"],
+    srcs:[
+      {txt:"Nigeria Data Protection Act 2023 — NDPC",url:"https://ndpc.gov.ng/NDPA2023.pdf"},
+      {txt:"AU Policy on Child Online Safety (feb. 2024) — Unión Africana",url:"https://au.int/en/documents/20240201/au-policy-child-online-safety"},
+    ],
+    wks:[
+      {tag:"NDPC sin enforcement real",body:"El Nigeria Data Protection Commission existe desde 2023 y no ha sancionado a ninguna plataforma global. La ley es nueva y su aplicación efectiva es casi nula.",ctr:"Nigeria propone la Política UA como referente africano pero no ha sancionado a ninguna empresa extranjera bajo su propia ley de datos."},
+      {tag:"Tensión con atracción de inversión tech",body:"Nigeria prioriza convertirse en hub tech africano. Hay tensión real entre regular agresivamente y no ahuyentar inversión extranjera en tecnología.",ctr:"Pedir transferencia tecnológica sin ofrecer reciprocidad regulatoria real es posición de receptor, no de co-constructor de estándares globales."},
+    ]
+  },
+  // ──────────────────── SUDÁFRICA ────────────────────
+  {
+    code:"ZAF",name:"Sudáfrica",region:"africa",
+    delegado:"Wilber Isael Contreras García",comite:"CCR",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"ZA",me:false,
+    sum:"POPIA robusta. Carta de Redes Sociales de la SAHRC. Marco basado en derechos humanos — aliado táctico para Argentina.",
+    leg:"Protection of Personal Information Act (POPIA, Act 4 of 2013, vigente 2021): uno de los marcos de datos más sólidos de África. SAHRC (South African Human Rights Commission) Social Media Charter: guías de protección de menores en redes sociales. Films and Publications Amendment Act (2019). Information Regulator como supervisor independiente de POPIA.",
+    pos:"Apoya marcos internacionales flexibles que respeten soberanía. Énfasis en DDHH y enfoque basado en derechos. Activa en mecanismos de la Unión Africana.",
+    int:["Marco basado en derechos humanos — no solo seguridad","Participación de menores en gobernanza digital","Cooperación con UA y SADC","Acceso equitativo como derecho digital básico"],
+    srcs:[
+      {txt:"POPIA — Government Gazette (texto oficial)",url:"https://www.gov.za/sites/default/files/gcis_document/201409/3706726-11act4of2013popi.pdf"},
+      {txt:"Information Regulator — South Africa",url:"https://www.justice.gov.za/inforeg/"},
+    ],
+    wks:[
+      {tag:"POPIA sin sanciones a grandes plataformas",body:"La Information Regulator aún no ha impuesto multas reales a plataformas globales por violaciones que afectan a menores sudafricanos.",ctr:"El enfoque de 'marcos flexibles' de Sudáfrica suena a falta de ambición regulatoria disfrazada de respeto a la soberanía."},
+      {tag:"Social Media Charter es voluntaria",body:"El Charter de la SAHRC no tiene fuerza legal. Las plataformas se adhieren voluntariamente — exactamente el modelo de autorregulación que ha fallado en todo el mundo.",ctr:"Si Sudáfrica cree en un enfoque basado en derechos, necesita mecanismos vinculantes — no charters que las plataformas firman y luego ignoran."},
+    ]
+  },
+  // ──────────────────── EGIPTO ────────────────────
+  {
+    code:"EGY",name:"Egipto",region:"africa",
+    delegado:"Camila Alexandra Martin Tavarez",comite:"CCR",
+    stance:"restrictiva",label:"Restrictiva",
+    fc:"var(--res)",fb:"var(--res-bg)",ini:"EG",me:false,
+    sum:"Datos de menores como 'datos sensibles'. Enfoque restrictivo con control estatal. Bloque árabe junto con Arabia Saudita y Turquía.",
+    leg:"Ley de Protección de Datos Personales No. 151/2020 (cap. 6): datos de menores clasificados como datos sensibles, requieren consentimiento del tutor legal. Ley de Lucha contra Delitos de Tecnología de la Información (Cybercrime Act, No. 175/2018). NCTRA (National Telecom Regulatory Authority): amplios poderes de bloqueo de contenido.",
+    pos:"Apoya control de contenido nocivo con intervención estatal fuerte. Favorece regulación soberana del espacio digital. Bloque árabe: prioriza 'valores culturales' en definición de contenido dañino.",
+    int:["Soberanía digital y derecho a regular contenido","Protección de valores culturales y religiosos","Cooperación árabe — Liga Árabe, OCI","Control de plataformas extranjeras operando en el país"],
+    srcs:[
+      {txt:"Ley 151/2020 — NCTRA (Egipto)",url:"https://www.tra.gov.eg/en/regulatory-framework/national-laws/"},
+      {txt:"Ley 175/2018 — Cybercrime Act Egipto",url:"https://www.mcit.gov.eg/Upcont/Documents/Publications_892020000_Cyber_Crime_law.pdf"},
+    ],
+    wks:[
+      {tag:"'Protección de menores' como pretexto de censura",body:"Egipto ha usado leyes de 'contenido dañino' para bloquear sitios de noticias, periodistas y activistas. El marco de 'protección' carece de supervisión independiente.",ctr:"Proponer que los estados definan soberanamente qué daña a menores sin supervisión internacional es dar carta blanca a la censura política."},
+      {tag:"Quien define 'daño' tiene el poder",body:"El modelo egipcio centraliza en el Estado la definición de qué perjudica a menores sin participación de sociedad civil ni controles independientes.",ctr:"Argentina debe oponerse firmemente a cualquier resolución que use 'protección infantil' como excusa para bloquear contenido político o periodístico."},
+      {tag:"Sin evidencia de resultados para menores",body:"No existen datos públicos de que el modelo restrictivo egipcio haya mejorado indicadores de seguridad digital infantil. La Ley de Ciberdelitos ha sido usada predominantemente contra adultos críticos al gobierno.",ctr:"El bloque árabe habla de proteger niños de 'contenido nocivo' pero no de protegerlos de grooming, explotación laboral digital o violencia en línea — la prioridad real no es el bienestar infantil."},
+    ]
+  },
+  // ──────────────────── KENIA ────────────────────
+  {
+    code:"KEN",name:"Kenia",region:"africa",
+    delegado:"Jose Francisco Heredia Luna",comite:"PIA",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"KE",me:false,
+    sum:"Referente africano. Data Protection Act 2019. Iniciativas documentadas con UNICEF. Aliado táctico sólido para Argentina.",
+    leg:"Data Protection Act No. 24 of 2019: protección específica de datos de menores, crea el Office of the Data Protection Commissioner (ODPC). Cybercrimes Act (No. 5/2018). Kenya Information and Communications Act (Cap 411A). Iniciativas documentadas de Child Online Protection con UNICEF y UIT.",
+    pos:"Líder africano en propuestas técnicas. Apoya armonización continental bajo la UA. Impulsa participación de menores en diseño de políticas.",
+    int:["Armonización regulatoria en África Oriental (EAC)","Estándares técnicos adaptados a baja conectividad","Financiamiento UIT para infraestructura de protección","Educación digital como herramienta de empoderamiento"],
+    srcs:[
+      {txt:"Data Protection Act No. 24/2019 — ODPC Kenya",url:"https://www.odpc.go.ke/dpa-act/"},
+      {txt:"ODPC — Office of the Data Protection Commissioner",url:"https://www.odpc.go.ke/"},
+    ],
+    wks:[
+      {tag:"ODPC con capacidad institucional limitada",body:"El ODPC existe desde 2021 con personal y presupuesto muy limitados para supervisar el ecosistema digital de 55M de personas. No ha sancionado a grandes plataformas internacionales.",ctr:"Kenia es referente técnico en África, pero liderazgo sin enforcement es solo documentos."},
+    ]
+  },
+  // ──────────────────── INDIA ────────────────────
+  {
+    code:"IND",name:"India",region:"asia",
+    delegado:"Angel Enmanuel Burgos Mercado",comite:"PIA",
+    stance:"cautelosa",label:"Cautelosa",
+    fc:"var(--cau)",fb:"var(--cau-bg)",ini:"IN",me:false,
+    sum:"Digital Personal Data Protection Act 2023. Mayor población joven del mundo (~500M menores). Tensión entre protección, soberanía de datos y desarrollo tech.",
+    leg:"Digital Personal Data Protection Act 2023 (DPDPA): consentimiento verificable de padres para datos de menores; Data Protection Board como supervisor. IT (Intermediary Guidelines and Digital Media Ethics Code) Rules 2021. Información Technology Act 2000. DPDPA pendiente de reglamentación secundaria completa (MeitY).",
+    pos:"Enfatiza soberanía de datos y localización. Apoya regulación pero rechaza marcos que debiliten control estatal. Prioriza desarrollo de industria tech local.",
+    int:["Localización de datos de menores en servidores nacionales","Regulación que no perjudique startups tech locales","Acceso digital como derecho — incluir 500M menores rurales","Cooperación sur-sur, no imposición de estándares del norte"],
+    srcs:[
+      {txt:"DPDPA 2023 — Texto oficial (Ministry of Law and Justice)",url:"https://www.meity.gov.in/content/digital-personal-data-protection-act-2023"},
+      {txt:"IT Rules 2021 — MeitY",url:"https://www.meity.gov.in/writereaddata/files/Information%20Technology%20%28Intermediary%20Guidelines%20and%20Digital%20Media%20Ethics%20Code%29%20Rules%2C%202021.pdf"},
+    ],
+    wks:[
+      {tag:"DPDPA sin reglamentos operativos completos",body:"La ley de 2023 fue aprobada pero sus mecanismos de implementación (incluyendo verificación de consentimiento parental) aún no tienen reglamentos secundarios completos. Es ley sin instrumentación.",ctr:"India tiene la mayor población joven del mundo pero no puede verificar la edad ni el consentimiento parental en la práctica — sus propias reglas del DPDPA no tienen reglamento."},
+      {tag:"Antecedentes de bloqueo de internet",body:"India ha cortado el acceso a internet más veces que cualquier otra democracia del mundo. El concepto de 'protección de menores' puede ser instrumentalizado para justificar restricciones arbitrarias.",ctr:"Pedir estándares del sur mientras se bloquea internet más que cualquier democracia del mundo es una contradicción insostenible."},
+    ]
+  },
+  // ──────────────────── CHINA ────────────────────
+  {
+    code:"CHN",name:"China",region:"asia",
+    delegado:"Samantha Charles",comite:"ELB",
+    stance:"restrictiva",label:"Restrictiva",
+    fc:"var(--res)",fb:"var(--res-bg)",ini:"CN",me:false,
+    sum:"Sistema más estricto del mundo: límites de tiempo en pantalla, verificación de identidad real, control de contenido. Pero derechos digitales de menores incompatibles con vigilancia masiva.",
+    leg:"Ley de Protección de Menores en Línea (2023): límite max. 2h/día en videojuegos online para menores de 18; sistema de nombre real obligatorio. Estándares de IA Generativa (CAC, 2024). Personal Information Protection Law (PIPL, 2021). Cyberspace Administration of China (CAC) con amplios poderes regulatorios. Prohibición de recomendaciones algorítmicas para menores sin opt-in explícito.",
+    pos:"Modelo de regulación estatal fuerte. Defiende soberanía cibernética. Apoya marcos que legitimen control de contenido por estados. Opuesto a estándares de privacidad occidentales y supervisión externa.",
+    int:["Legitimación internacional del modelo de soberanía cibernética","Estándares técnicos propios — no solo IEEE/ISO","Control de contenido como prerrogativa soberana","Oposición a mecanismos de supervisión internacionales"],
+    srcs:[
+      {txt:"Ley de Protección de Menores en Línea (2023) — CAC",url:"http://www.cac.gov.cn/2023-10/16/c_1699249984641026.htm"},
+      {txt:"PIPL (2021) — NPC (Congreso Nacional del Pueblo)",url:"http://www.npc.gov.cn/npc/c30834/202108/a8c4e3672c74491a80b53a172bb753fe.shtml"},
+    ],
+    wks:[
+      {tag:"'Protección' y vigilancia son la misma infraestructura",body:"El sistema de nombre real de China para menores es la misma infraestructura usada para el Sistema de Crédito Social y la vigilancia de disidentes políticos.",ctr:"China dice proteger a los niños, pero los niños chinos no pueden buscar información sobre Tiananmen, derechos LGBTQ+ o historia política independiente. Eso no es protección — es adoctrinamiento."},
+      {tag:"Límites de pantalla burlados sistemáticamente",body:"Estudios independientes muestran que el límite de 2h/día en videojuegos es violado masivamente mediante VPNs, cuentas adultas y dispositivos alternativos. La regulación más dura del mundo no funciona sin legitimidad social.",ctr:"El modelo chino de soberanía cibernética legitima exactamente las herramientas que usan los estados autoritarios para silenciar a menores activistas."},
+      {tag:"Sin acceso a información independiente",body:"Un marco que impide a menores acceder a información sobre derechos humanos, historia o política no es protección — es censura estructural.",ctr:"Adoptar estándares chinos en la UIT sería consagrar como norma global que los gobiernos pueden decidir qué información merecen ver los niños."},
+    ]
+  },
+  // ──────────────────── JAPÓN ────────────────────
+  {
+    code:"JPN",name:"Japón",region:"asia",
+    delegado:"Samuel Taveras Frias",comite:"SJFA",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"JP",me:false,
+    sum:"Marco técnico robusto. Cooperación con Five Eyes. Regulación de plataformas y apps. Equilibrio entre innovación y protección.",
+    leg:"Act on Development of an Environment that Provides Safe and Secure Internet Use for Young People (2008, reformada). Smartphone Software Competition Promotion Act (2024). Reformas a la Act on Protection of Personal Information (2022, plena vigencia 2022). Personal Information Protection Commission (PPC) como regulador. Tokutei Denki Tsūshin Jigyōhō (Ley de Proveedores de Comunicación).",
+    pos:"Apoya estándares técnicos internacionales. Prioriza cooperación multilateral en CSAM y grooming. Equilibrio entre innovación y protección.",
+    int:["Cooperación internacional en persecución de CSAM","Estándares de diseño apropiado para la edad","Regulación de plataformas digitales (especialmente apps)","Educación digital integrada al currículo escolar"],
+    srcs:[
+      {txt:"Act on Safe Internet Use for Young People — e-Gov (texto oficial)",url:"https://elaws.e-gov.go.jp/document?lawid=420AC0000000079"},
+      {txt:"PPC — Personal Information Protection Commission Japan",url:"https://www.ppc.go.jp/en/"},
+    ],
+    wks:[
+      {tag:"Industria del entretenimiento como laguna",body:"Japón tiene una industria masiva de manga/anime con contenido que muchos países considerarían inapropiado para menores. Sus estándares de 'contenido nocivo' son significativamente más permisivos que los occidentales.",ctr:"Japón habla de diseño apropiado para la edad pero tiene uno de los mercados de contenido sexualizado de personajes con apariencia juvenil más grandes del mundo."},
+      {tag:"Filtrado voluntario con ISPs — sin enforcement coercitivo",body:"El sistema japonés de filtrado de contenido dañino opera por cooperación voluntaria de ISPs — no hay obligación legal a plataformas internacionales.",ctr:"La cooperación voluntaria de ISPs es el mismo modelo de autorregulación que no ha funcionado en ningún contexto — no puede ser el estándar internacional."},
+    ]
+  },
+  // ──────────────────── COREA DEL SUR ────────────────────
+  {
+    code:"KOR",name:"Corea del Sur",region:"asia",
+    delegado:"Paola Marie González Aguilera",comite:"SJFA",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"KR",me:false,
+    sum:"Pionera en adicción digital (2014). Sistema IA de detección CSAM en tiempo real (2025). Transferencia tecnológica — aliado potencial.",
+    leg:"Juvenile Protection Act (cap. 3: adicción a internet). Sistema IA de monitoreo CSAM en tiempo real aprobado en 2025 (Korea Communications Standards Commission). PIPC (Personal Information Protection Commission): servicio 'borrador' (derecho al olvido digital para menores). Kakao multada KRW 15.1B (aprox. USD 11M) en 2024 por violaciones a datos de menores. Game Industry Promotion Act.",
+    pos:"Apoya regulación dura basada en tecnología. Lidera en uso de IA para protección de menores. Impulsa transferencia de tecnología para países en desarrollo.",
+    int:["IA como herramienta de detección y respuesta ante CSAM","Regulación de videojuegos y prevención de adicción digital","Derecho al olvido digital para menores","Exportación de soluciones tech de protección infantil"],
+    srcs:[
+      {txt:"Juvenile Protection Act — Korea Law Information Center",url:"https://www.law.go.kr/lsInfoP.do?lsiSeq=130118&efYd=20140320"},
+      {txt:"PIPC — Personal Information Protection Commission Korea",url:"https://www.pipc.go.kr/eng/"},
+    ],
+    wks:[
+      {tag:"Shutdown Law derogada — modelo cuestionado",body:"La 'Shutdown Law' que prohibía juegos online a menores de 16 después de las 00:00h fue derogada en 2021 por inefectiva. Corea del Sur propone regulación dura, pero su propia experiencia muestra que puede ser contraproducente.",ctr:"La derogación de la Shutdown Law demuestra que incluso las regulaciones más estrictas pueden fallar si no tienen base en evidencia — no todo modelo asiático es replicable."},
+    ]
+  },
+  // ──────────────────── INDONESIA ────────────────────
+  {
+    code:"IDN",name:"Indonesia",region:"asia",
+    delegado:"Princesa Nayla Aguirre Cuevas",comite:"SJFA",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"ID",me:false,
+    sum:"Regulación pionera en Asia de diseño apropiado para la edad (may. 2025, con IEEE SA). Evaluando ban de redes sociales para menores.",
+    leg:"Government Regulation on Child Protection in Electronic Systems (Peraturan Pemerintah, may. 2025), elaborada con IEEE SA: diseño apropiado para la edad, age verification. UU ITE (Ley de Información y Transacciones Electrónicas, UU No. 19/2016). Prohibición de perfilado de datos de menores. Kominfo (Ministerio de Comunicaciones e Informática) como regulador.",
+    pos:"Modelo emergente en Asia-Pacífico. Apoya estándares técnicos internacionales (IEEE). Equilibra protección con acceso a información.",
+    int:["Primera regulación de edad-apropiada en Asia como referente","Registro de plataformas globales en jurisdicción nacional","Cooperación ASEAN en protección de menores","Estándares de age verification para contextos en desarrollo"],
+    srcs:[
+      {txt:"Kominfo — Kementerian Komunikasi dan Informatika",url:"https://www.kominfo.go.id/"},
+      {txt:"UU ITE (UU No. 19/2016) — JDIH BPK",url:"https://peraturan.bpk.go.id/Details/37582"},
+    ],
+    wks:[
+      {tag:"UU ITE usada para silenciar críticos",body:"La Ley de Información y Transacciones Electrónicas ha sido usada sistemáticamente para perseguir a periodistas, activistas y ciudadanos que critican al gobierno. El marco de 'contenido dañino' tiene un precedente de abuso.",ctr:"Indonesia propone regulación de diseño apropiado para la edad al mismo tiempo que usa la UU ITE para encarcelar a quienes publican crítica política — eso define cómo entiende 'contenido dañino'."},
+    ]
+  },
+  // ──────────────────── AUSTRALIA ────────────────────
+  {
+    code:"AUS",name:"Australia",region:"asia",
+    delegado:"Railenny Rosa Corniel",comite:"SJFA",
+    stance:"progresista",label:"Progresista",
+    fc:"var(--prog)",fb:"var(--prog-bg)",ini:"AU",me:false,
+    sum:"La regulación más avanzada del mundo (2024): ban de redes sociales para menores de 16, vigente dic. 2025. eSafety Commissioner como modelo regulatorio.",
+    leg:"Online Safety Amendment (Social Media Minimum Age) Act 2024: prohibición de redes sociales para menores de 16 en Australia, vigente 10 dic. 2025 (Royal Assent 10 dic. 2024). Multas hasta AUD $49.5M por incumplimiento. Plataformas afectadas: Facebook, Instagram, TikTok, Snapchat, X, Reddit, Twitch, YouTube, Threads, Kick. Online Safety Act 2021. eSafety Commissioner como regulador. Children's Online Privacy Code: en desarrollo (jul. 2025).",
+    pos:"Modelo global de protección estricta. Activa diplomacia para exportar su marco. Prioriza responsabilidad de plataformas sobre educación de usuarios o control parental. Cooperación Five Eyes.",
+    int:["Ban de redes sociales para menores como estándar internacional","Responsabilidad primaria de plataformas — no de padres","Cooperación en enforcement con Indo-Pacífico","Código de privacidad infantil como modelo exportable"],
+    srcs:[
+      {txt:"Online Safety Amendment Act 2024 — Federal Register of Legislation (texto oficial)",url:"https://www.legislation.gov.au/C2024A00127/asmade/text"},
+      {txt:"eSafety Commissioner — Social Media Age Restrictions",url:"https://www.esafety.gov.au/about-us/industry-regulation/social-media-age-restrictions"},
+      {txt:"PM Australia — Comunicado oficial aprobación (nov. 2024)",url:"https://www.pm.gov.au/media/social-media-reforms-protect-our-kids-online-pass-parliament"},
+      {txt:"Library of Congress — Global Legal Monitor: Australia ban",url:"https://www.loc.gov/item/global-legal-monitor/2024-12-08/australia-social-media-banned-for-children-under-16/"},
+    ],
+    wks:[
+      {tag:"Ban difícil de hacer cumplir — VPNs e inconsistencias",body:"En feb. 2026, Guardian Australia reportó que adolescentes menores de 16 aún accedían a plataformas restringidas. UNICEF Australia señaló que el ban por sí solo no resuelve los problemas online. El propio gobierno reconoció que no habrá sanciones individuales a menores.",ctr:"Australia tiene el ban más estricto del mundo pero no puede hacerlo cumplir efectivamente — un modelo que no escala no puede ser el estándar global."},
+      {tag:"Exclusión de menores de espacios de conexión",body:"Críticos señalan que el ban priva a menores de espacios legítimos de comunicación, educación y apoyo emocional. La propia revisión independiente es obligatoria dentro de 2 años.",ctr:"Prohibir el acceso a redes sociales sin ofrecer alternativas digitales seguras no es protección — es exclusión. Argentina puede apoyar regulación sin prohibiciones totales."},
+    ]
+  },
+  // ──────────────────── NUEVA ZELANDA ────────────────────
+  {
+    code:"NZL",name:"Nueva Zelanda",region:"asia",
+    delegado:"Brianna Ureña Pimentel",comite:"AB",
+    stance:"moderada",label:"Moderada",
+    fc:"var(--mod)",fb:"var(--mod-bg)",ini:"NZ",me:false,
+    sum:"Marco de bienestar digital centrado en menores. Cooperación con Australia y Five Eyes. Basado en UNCRC.",
+    leg:"Privacy Act 2020: protección de datos personales. Online Safety Bill (en revisión 2025): actualización del marco de seguridad online. Participación en Virtual Global Taskforce contra CSAM (con Interpol/Europol). Marco basado en United Nations Convention on the Rights of the Child (UNCRC).",
+    pos:"Apoya marcos internacionales basados en UNCRC. Impulsa enfoque de bienestar (no solo seguridad). Cooperación regional Indo-Pacífico.",
+    int:["UNCRC como base de cualquier marco UIT","Bienestar mental de menores junto con seguridad","Cooperación contra CSAM con Interpol/Europol","Mecanismos de participación infantil en gobernanza"],
+    srcs:[
+      {txt:"Privacy Act 2020 — New Zealand Legislation (texto oficial)",url:"https://www.legislation.govt.nz/act/public/2020/0031/latest/LMS23223.html"},
+      {txt:"Office of the Privacy Commissioner — New Zealand",url:"https://www.privacy.org.nz/"},
+    ],
+    wks:[
+      {tag:"Online Safety Bill aún en revisión",body:"Nueva Zelanda lleva años actualizando su marco de seguridad online sin concretar legislación definitiva. La revisión de 2025 no ha producido resultados aprobados.",ctr:"Nueva Zelanda impulsa estándares internacionales basados en UNCRC pero no ha actualizado su propia legislación de seguridad online en años."},
+    ]
+  },
+  // ──────────────────── ARABIA SAUDITA ────────────────────
+  {
+    code:"SAU",name:"Arabia Saudita",region:"mideast",
+    delegado:"Rocío Shanelis Mercedes",comite:"AB",
+    stance:"restrictiva",label:"Restrictiva",
+    fc:"var(--res)",fb:"var(--res-bg)",ini:"SA",me:false,
+    sum:"PDPL en vigor desde sept. 2024. Fuerte control estatal. Alianza estratégica con EE.UU. en IA (2025). Soberanía en definición de 'contenido dañino'.",
+    leg:"Personal Data Protection Law (PDPL, Royal Decree M/19, 2021, vigente sept. 2024): derechos de datos, acceso, rectificación; aplicada por Saudi Data & AI Authority (SDAIA). National Cybersecurity Risk Management Framework (NCA, 2025). Alianza estratégica en IA con EE.UU. (2025, acuerdo bilateral). Anti-Cybercrime Law (No. 17/M, 2007).",
+    pos:"Apoya regulación estatal fuerte. Defiende soberanía en definición de contenido nocivo según valores islámicos. Bloque árabe en ONU. Inversión masiva en IA con controles propios.",
+    int:["Soberanía en definición cultural de contenido inapropiado","Marcos que legitimen regulación por valores nacionales","Alianzas estratégicas en IA y ciberseguridad","Oposición a estándares que impongan definiciones occidentales de libertad"],
+    srcs:[
+      {txt:"PDPL — Saudi Data & AI Authority (SDAIA)",url:"https://sdaia.gov.sa/en/SDAIA/about/Documents/PDPL%20English%20V2-iFinal-Combined.pdf"},
+      {txt:"Anti-Cybercrime Law — Bureau of Experts at the Council of Ministers",url:"https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/8cf4e769-fa1b-4e77-9a6d-a9a400f201be/1"},
+    ],
+    wks:[
+      {tag:"Derechos digitales de mujeres y menores negados",body:"Arabia Saudita tiene antecedentes documentados de restricción de derechos digitales de mujeres y activistas. La definición de 'contenido dañino' se extiende a información sobre derechos de la mujer, LGBTQ+ y disidencia política.",ctr:"Un estado que hasta 2018 prohibía conducir a las mujeres no puede ser referente en 'derechos digitales de menores' — el concepto que defiende es control, no protección."},
+      {tag:"PDPL sin supervisión independiente real",body:"La SDAIA que aplica el PDPL es una entidad gubernamental sin independencia real del ejecutivo. No existe un ombudsman independiente de privacidad.",ctr:"Una ley de datos aplicada por el mismo gobierno que restringe el acceso a información no es protección — es vigilancia legitimada."},
+    ]
+  },
+  // ──────────────────── TURQUÍA ────────────────────
+  {
+    code:"TUR",name:"Turquía",region:"mideast",
+    delegado:"Roberto Enmanuel Felix del Rosario",comite:"PLG",
+    stance:"restrictiva",label:"Restrictiva",
+    fc:"var(--res)",fb:"var(--res-bg)",ini:"TR",me:false,
+    sum:"Bloqueos sistemáticos a plataformas. Marco de IA en proceso (2025). Poderes de bloqueo de emergencia. Posición intermedia entre Europa y bloque autoritario.",
+    leg:"Kişisel Verilerin Korunması Kanunu (KVKK, Ley 6698/2016, enmendada 2024): protección de datos personales. Proyecto de Ley de IA 2025: etiquetado obligatorio, mecanismos de bloqueo de emergencia. Ley No. 5651 de Internet (enmendada múltiples veces): amplios poderes de bloqueo de contenido, incluyendo de emergencia. Türkiye ha bloqueado Twitter/X, YouTube, Wikipedia en distintos momentos.",
+    pos:"Apoya regulación estatal fuerte de plataformas. Reconoce poderes de bloqueo de emergencia como herramienta legítima. Posición de puente entre UE y bloque árabe/asiático.",
+    int:["Reconocimiento de poderes de bloqueo estatal","Marcos que no obliguen a transparencia algorítmica plena","Regulación de deepfakes y desinformación con control estatal","Posición de puente entre UE y bloque árabe/asiático"],
+    srcs:[
+      {txt:"KVKK — Kişisel Verileri Koruma Kurumu (KVKK Board)",url:"https://www.kvkk.gov.tr/en"},
+      {txt:"Ley No. 5651 (Internet Law) — Grand National Assembly",url:"https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=5651&MevzuatTur=1&MevzuatTertip=5"},
+    ],
+    wks:[
+      {tag:"Bloqueos sistemáticos de plataformas sin base en protección infantil",body:"Turquía ha bloqueado Twitter, YouTube, Wikipedia y otras plataformas por razones políticas, no por protección de menores. Los poderes de la Ley 5651 son ampliamente usados para silenciar crítica.",ctr:"Los 'poderes de bloqueo de emergencia' que Turquía defiende son los mismos que ha usado para silenciar información política durante elecciones y protestas."},
+      {tag:"Acusaciones de violación del DSA europeo",body:"La Comisión Europea ha señalado a Turquía por prácticas incompatibles con el DSA. Türkiye está en proceso de adhesión UE con expediente digital problemático.",ctr:"Un país que viola los estándares europeos de derechos digitales no puede ser el puente entre modelos regulatorios — es el ejemplo de lo que no debe hacerse."},
+    ]
+  },
+];
+
+// ── RENDER ──
+let cur_r='all', cur_s=null, cur_q='';
+const grid=document.getElementById('grid');
+const sb=document.getElementById('statsbar');
+
+function stanceColor(s){
+  return s==='progresista'?'var(--prog)':s==='moderada'?'var(--mod)':s==='cautelosa'?'var(--cau)':'var(--res)';
+}
+
+function renderStats(list){
+  const p=list.filter(c=>c.stance==='progresista').length;
+  const m=list.filter(c=>c.stance==='moderada').length;
+  const ca=list.filter(c=>c.stance==='cautelosa').length;
+  const r=list.filter(c=>c.stance==='restrictiva').length;
+  sb.innerHTML=`<div class="stat-item">Mostrando <span>${list.length}</span> ${list.length===1?'país':'países'}</div>
+    <div class="stat-item st-p">Progresista <span>${p}</span></div>
+    <div class="stat-item st-m">Moderada <span>${m}</span></div>
+    <div class="stat-item st-c">Cautelosa <span>${ca}</span></div>
+    <div class="stat-item st-r">Restrictiva <span>${r}</span></div>`;
+}
+
+function makeCard(c){
+  const card=document.createElement('div');
+  card.className='card'+(c.me?' me':'');
+  const hasTabs=!c.me;
+  const wkHtml=c.wks.map((w,i)=>`
+    <div class="wk">
+      <div class="wktag">⚡ ${w.tag}</div>
+      <div class="wkbody">${w.body}</div>
+      ${w.ctr?`<div class="counter">→ "${w.ctr}"</div>`:''}
+    </div>`).join('');
+  const srcHtml=c.srcs.map(s=>`<li><a href="${s.url}" target="_blank" rel="noopener">${s.txt}</a></li>`).join('');
+
+  const detailHtml=c.me?`
+    <div class="cdetail" id="dt-${c.code}">
+      <div class="pane on" style="padding:14px 18px">
+        <div class="lbl">Legislación clave</div>
+        <div class="txt">${c.leg}</div>
+        <div class="lbl">Postura en el debate</div>
+        <div class="txt">${c.pos}</div>
+        <div class="lbl">Intereses principales</div>
+        <ul class="ilist">${c.int.map(i=>`<li>${i}</li>`).join('')}</ul>
+        <div class="lbl">Fuentes oficiales</div>
+        <ul class="src-list">${srcHtml}</ul>
+      </div>
+    </div>`:
+  `<div class="cdetail" id="dt-${c.code}">
+    <div class="tabs">
+      <button class="tab on" data-tab="info-${c.code}">Legislación y postura</button>
+      <button class="tab" data-tab="int-${c.code}">Intereses</button>
+      <button class="tab" data-tab="src-${c.code}">Fuentes</button>
+      <button class="tab atk" data-tab="atk-${c.code}">⚡ Atacar</button>
+    </div>
+    <div class="pane on" id="info-${c.code}">
+      <div class="lbl">Legislación clave</div>
+      <div class="txt">${c.leg}</div>
+      <div class="lbl">Postura en el debate</div>
+      <div class="txt">${c.pos}</div>
+    </div>
+    <div class="pane" id="int-${c.code}">
+      <ul class="ilist">${c.int.map(i=>`<li>${i}</li>`).join('')}</ul>
+    </div>
+    <div class="pane" id="src-${c.code}">
+      <ul class="src-list">${srcHtml}</ul>
+    </div>
+    <div class="pane" id="atk-${c.code}">
+      ${c.wks.length?`<div class="atk-banner">// Puntos débiles — úsalos para atacar o anticipar ataques a Argentina</div>${wkHtml}`:'<div class="txt">Aliado — centrate en puntos de convergencia.</div>'}
+    </div>
+  </div>`;
+
+  card.innerHTML=`
+    <div class="ctop">
+      ${c.me?`<div class="me-tag">TU DELEGACIÓN</div>`:''}
+      <div class="chdr">
+        <div class="cleft">
+          <div class="flag" style="background:${c.fb};color:${c.fc}">${c.ini}</div>
+          <div>
+            <div class="cname">${c.name}</div>
+            <div class="cmeta">${[c.delegado,c.comite].filter(Boolean).join(' · ')}</div>
+          </div>
+        </div>
+        <span class="badge" style="background:${c.fb};color:${c.fc}">${c.label}</span>
+      </div>
+      <p class="sum">${c.sum}</p>
+    </div>
+    ${detailHtml}
+    <div class="cftr">
+      <button class="tbtn" id="tb-${c.code}">Ver más <span class="arr">↓</span></button>
+    </div>`;
+
+  // expand toggle
+  card.querySelector(`#tb-${c.code}`).addEventListener('click',()=>{
+    const dt=card.querySelector(`#dt-${c.code}`);
+    const btn=card.querySelector(`#tb-${c.code}`);
+    const open=dt.classList.toggle('open');
+    btn.classList.toggle('open',open);
+    btn.innerHTML=open?'Ver menos <span class="arr">↑</span>':'Ver más <span class="arr">↓</span>';
+  });
+
+  // tabs (only non-me cards)
+  if(!c.me){
+    card.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click',()=>{
+        card.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+        card.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+        t.classList.add('on');
+        card.querySelector('#'+t.dataset.tab).classList.add('on');
+      });
+    });
+  }
+  return card;
+}
+
+function applyFilters(){
+  let list=D;
+  if(cur_r!=='all') list=list.filter(c=>c.region===cur_r);
+  if(cur_s) list=list.filter(c=>c.stance===cur_s);
+  if(cur_q.trim()){
+    const q=cur_q.toLowerCase();
+    list=list.filter(c=>
+      c.name.toLowerCase().includes(q)||
+      c.delegado.toLowerCase().includes(q)||
+      c.leg.toLowerCase().includes(q)||
+      c.pos.toLowerCase().includes(q)||
+      c.int.some(i=>i.toLowerCase().includes(q))
+    );
+  }
+  grid.innerHTML='';
+  if(!list.length){
+    grid.innerHTML='<div class="nores">SIN RESULTADOS — intenta otra búsqueda</div>';
+  } else {
+    list.forEach(c=>grid.appendChild(makeCard(c)));
+  }
+  renderStats(list);
+}
+
+// Region filters
+document.getElementById('rgn').querySelectorAll('.fbtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.getElementById('rgn').querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');cur_r=b.dataset.r;applyFilters();
+  });
+});
+
+// Stance filters (toggle)
+document.getElementById('stn').querySelectorAll('.fbtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(cur_s===b.dataset.s){cur_s=null;b.classList.remove('on');}
+    else{
+      document.getElementById('stn').querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');cur_s=b.dataset.s;
+    }
+    applyFilters();
+  });
+});
+
+// Search
+document.getElementById('si').addEventListener('input',e=>{cur_q=e.target.value;applyFilters();});
+
+applyFilters();
+</script>
+</body>
+</html>
